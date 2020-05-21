@@ -141,4 +141,7 @@ type Theme struct {
 
 	DurationFg uint8
 	DurationBg uint8
+
+	GitVersionFg uint8
+	GitVersionBg uint8
 }
