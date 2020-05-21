@@ -9,14 +9,19 @@ import (
 
 func segmentGitVersion(p *powerline) []pwl.Segment {
 
-	out, _ := exec.Command("dotnet-gitversion").Output()
+	out, err := exec.Command("dotnet-gitversion").Output()
+
+	if err != nil {
+        return []pwl.Segment{}
+    }
+
 	var result map[string]interface{}
 
 	json.Unmarshal([]byte(out), &result)
 	semVersion := fmt.Sprintf("%v.%v.%v", result["Major"], result["Minor"], result["Patch"])
 
 	return []pwl.Segment{{
-		Name:       "gitVersion",
+		Name:       "gitversion",
 		Content:    semVersion,
 		Foreground: p.theme.GitVersionFg,
 		Background: p.theme.GitVersionBg,
