@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	pwl "github.com/justjanne/powerline-go/powerline"
 	"os/exec"
 )
