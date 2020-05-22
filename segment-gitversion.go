@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	pwl "github.com/justjanne/powerline-go/powerline"
 	"os/exec"
 	"strings"
@@ -9,6 +10,7 @@ import (
 
 type GitVersion struct {
 	MajorMinorPatch string
+	PreReleaseLabel string
 }
 
 func segmentGitVersion(p *powerline) []pwl.Segment {
@@ -36,7 +38,7 @@ func segmentGitVersion(p *powerline) []pwl.Segment {
 
 	return []pwl.Segment{{
 		Name:       "gitversion",
-		Content:    gitVersionOutput.MajorMinorPatch,
+		Content:    fmt.Sprintf("%s-%s", gitVersionOutput.MajorMinorPatch, gitVersionOutput.PreReleaseLabel),
 		Foreground: p.theme.GitVersionFg,
 		Background: p.theme.GitVersionBg,
 	}}
