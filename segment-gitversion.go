@@ -2,27 +2,32 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	pwl "github.com/justjanne/powerline-go/powerline"
 	"os/exec"
 )
 
+type GitVersion struct {
+	MajorMinorPatch string
+}
+
 func segmentGitVersion(p *powerline) []pwl.Segment {
 
 	out, err := exec.Command("dotnet-gitversion").Output()
-
+	
 	if err != nil {
         return []pwl.Segment{}
     }
 
-	var result map[string]interface{}
+	var gitVersionOutput GitVersion
+	err = json.Unmarshal([]byte(out), &gitVersionOutput)
 
-	json.Unmarshal([]byte(out), &result)
-	semVersion := fmt.Sprintf("%v.%v.%v", result["Major"], result["Minor"], result["Patch"])
+	if err != nil || gitVersionOutput.MajorMinorPatch == "" {
+		return []pwl.Segment{}
+	}
 
 	return []pwl.Segment{{
 		Name:       "gitversion",
-		Content:    semVersion,
+		Content:    gitVersionOutput.MajorMinorPatch,
 		Foreground: p.theme.GitVersionFg,
 		Background: p.theme.GitVersionBg,
 	}}
